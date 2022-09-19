@@ -8,6 +8,7 @@ keywords = ["valorant", "vault", "keepass"]
 dependencies = [
     "requests",
     "pykeepass",
+    "jwt",
 ]
 requires-python = ">=3.9"
 
