@@ -1,5 +1,5 @@
 from .structs import Settings
-from .storage import jsonRead, jsonWrite, settingsPath
+from .storage import jsonRead, settingsPath
 
 def get_settings() -> Settings:
 	settings = jsonRead(settingsPath / "config.json")
