@@ -1,0 +1,15 @@
+[project]
+name = "ValVault"
+version = "1.0.0"
+readme = "README.md"
+authors = [{ name = "PWall" }]
+license = { file = "LICENSE" }
+keywords = ["valorant", "vault", "keepass"]
+dependencies = [
+    "requests",
+    "pykeepass",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/pwall2222/ValVault"
