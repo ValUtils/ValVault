@@ -1,3 +1,4 @@
 __pycache__/
-ValVault.egg-info/
+*.egg-info/
+.pytest_cache/
 dist/
