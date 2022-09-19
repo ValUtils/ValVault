@@ -10,7 +10,7 @@ dependencies = [
     "pykeepass",
     "jwt",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 
 [project.urls]
 Homepage = "https://github.com/pwall2222/ValVault"
