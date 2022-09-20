@@ -13,5 +13,5 @@ class Auth:
 	user_id: str
 
 @dataclass
-class Settings():
+class Settings:
 	insecure: bool
