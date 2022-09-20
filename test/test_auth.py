@@ -7,7 +7,7 @@ def add_path():
 
 add_path()
 
-def test_add_col():
+def test_auth():
 	import ValVault
 	username = getenv("USERNAME")
 	password = getenv("PASSWORD")
