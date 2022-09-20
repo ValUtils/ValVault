@@ -13,3 +13,15 @@ def test_auth():
 	password = getenv("PASSWORD")
 	user = ValVault.User(username, password)
 	return ValVault.getAuth(user)
+
+def test_db():
+	import ValVault
+	from ValVault.storage import jsonWrite, settingsPath
+	jsonWrite({"insecure": True},settingsPath / "config.json")
+	ValVault.init()
+	username = getenv("USERNAME")
+	password = getenv("PASSWORD")
+	ValVault.newUser(username, password)
+	assert username in ValVault.getUsers(), "Username not in db"
+	assert ValVault.getPass(username) == password, "Password not in db"
+	
