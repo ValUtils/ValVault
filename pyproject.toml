@@ -3,7 +3,7 @@ name = "ValVault"
 version = "0.0.1"
 readme = "README.md"
 authors = [{ name = "PWall" }]
-license = { file = "LICENSE" }
+license = "GPL-3.0"
 keywords = ["valorant", "vault", "keepass"]
 dependencies = [
     "requests",
