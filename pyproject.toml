@@ -1,6 +1,6 @@
 [project]
 name = "ValVault"
-version = "1.1.2"
+version = "1.2.0"
 readme = "README.md"
 authors = [{ name = "PWall" }]
 license = {text = "GPL-3.0"}
