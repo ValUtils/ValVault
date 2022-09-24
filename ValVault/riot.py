@@ -7,6 +7,7 @@ from requests.adapters import HTTPAdapter
 from .exceptions import AuthException
 from .structs import Auth, User
 from .parsing import encodeJSON, magicDecode
+from .get_version import riot_version
 
 platform = {
 	"platformType": "PC",
@@ -28,7 +29,11 @@ FORCED_CIPHERS = [
 	'RSA+3DES'
 ]
 
-userAgent = "RiotClient/51.0.0.4429735.4429735 rso-auth (Windows;10;;Professional, x64)"
+def getUserAgent():
+	version = riot_version()
+	os = "(Windows;10;;Professional, x64)"
+	userAgent = f"RiotClient/{version} rso-auth {os}"
+	return userAgent
 
 def getToken(uri: str):
 	access_token = uri.split("access_token=")[1].split("&scope")[0]
@@ -53,7 +58,7 @@ def setupSession() -> requests.Session:
 
 	session = requests.session()
 	session.headers = OrderedDict({
-		"User-Agent": userAgent,
+		"User-Agent": getUserAgent(),
 		"Accept-Language": "en-US,en;q=0.9",
 		"Accept": "application/json, text/plain, */*"
 	})
@@ -119,7 +124,7 @@ def getVersion():
 def makeHeaders(auth: Auth):
 	return {
 		'Accept-Encoding': 'gzip, deflate, br',
-		'User-Agent': userAgent,
+		'User-Agent': getUserAgent(),
 		'Authorization': f'Bearer {auth.access_token}',
 		'X-Riot-Entitlements-JWT': auth.entitlements_token,
 		'X-Riot-ClientPlatform': encodeJSON(platform),
