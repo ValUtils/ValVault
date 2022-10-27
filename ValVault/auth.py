@@ -6,7 +6,7 @@ from .structs import User
 from .riot import authenticate
 from .password import EncryptedDB
 
-db: EncryptedDB
+db: EncryptedDB = None
 
 def reAuth():
 	print(f"Wrong username or password, type username and password to retry!")
@@ -41,6 +41,8 @@ def getValidPass():
 
 def init():
 	global db
+	if (db):
+		return
 	settings = get_settings()
 	if (settings.insecure):
 		db = EncryptedDB(" ")
