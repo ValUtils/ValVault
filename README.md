@@ -19,7 +19,7 @@ from ValVault import (
 init_auth()
 new_user("Test", "Password")
 username = get_users()[0]
-user = User(username, getPass(username))
+user = User(username, get_pass(username))
 auth = get_auth(user)
 headers = make_headers(auth)
 #Use auth headers to do whatever
