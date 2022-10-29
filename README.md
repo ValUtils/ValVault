@@ -8,19 +8,19 @@ This python module stores the user credentials of riot users and also provides t
 ```python
 from ValVault import (
  init as init_auth,
- makeHeaders,
- getUsers,
- getPass,
- getAuth,
- newUser,
+ make_headers,
+ get_users,
+ get_pass,
+ get_auth,
+ new_user,
  User
 )
 
 init_auth()
-newUser("Test", "Password")
-username = getUsers()[0]
+new_user("Test", "Password")
+username = get_users()[0]
 user = User(username, getPass(username))
-auth = getAuth(user)
-headers = makeHeaders(auth)
+auth = get_auth(user)
+headers = make_headers(auth)
 #Use auth headers to do whatever
 ```
