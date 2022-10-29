@@ -15,8 +15,8 @@ class EncryptedDB:
 	def create(self, path, password):
 		self.db = create_database(path, password)
 
-	def saveUser(self, user, password):
-		entry = self.getUser(user)
+	def save_user(self, user, password):
+		entry = self.get_user(user)
 		if (entry):
 			entry.password = password
 			self.db.save()
@@ -24,15 +24,15 @@ class EncryptedDB:
 		self.db.add_entry(self.db.root_group, "Riot", user, password)
 		self.db.save()
 
-	def getUsers(self):
+	def get_users(self):
 		entries = self.db.find_entries(title="Riot")
 		return [e.username for e in entries]
 
-	def getUser(self, username):
+	def get_user(self, username):
 		return self.db.find_entries(username=username, first=True)
 
-	def getPasswd(self, user):
-		entry = self.getUser(user)
+	def get_passwd(self, user):
+		entry = self.get_user(user)
 		if (not entry): return None
 		return entry.password
 

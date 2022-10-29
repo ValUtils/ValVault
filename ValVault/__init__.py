@@ -1,10 +1,10 @@
 from .auth import *
 from .structs import *
-from .riot import makeHeaders
+from .riot import make_headers
 
 __all__ = [
-	"getAuth", "getUsers", "getPass",
-	"newUser", "init",
+	"getAuth", "get_users", "get_pass",
+	"new_user", "init",
 	"User", "Auth",
-	"makeHeaders",
+	"make_headers",
 ]

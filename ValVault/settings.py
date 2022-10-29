@@ -1,6 +1,6 @@
 from .structs import Settings
-from .storage import jsonRead, settingsPath
+from .storage import json_read, settingsPath
 
 def get_settings() -> Settings:
-	settings = jsonRead(settingsPath / "config.json")
+	settings = json_read(settingsPath / "config.json")
 	return Settings(settings["insecure"])
