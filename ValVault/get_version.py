@@ -6,7 +6,7 @@ from hachoir.parser import guessParser
 from hachoir.metadata import extractMetadata
 from hachoir.stream import FileInputStream
 
-from .storage import readFromDrive, saveToDrive, settingsPath
+from .storage import read_from_drive, save_to_drive, settingsPath
 
 def get_exe_version(path:Path):
 	realPath = str(path)
@@ -33,7 +33,7 @@ def fallback():
 	oneWeek = 86400 * 7
 	if (modTime > oneWeek):
 		return get_save_remote()
-	return readFromDrive(versionPath)
+	return read_from_drive(versionPath)
 
 def from_exe():
 	defaultLocation = Path("C:/Riot Games/Riot Client/RiotClientServices.exe")
@@ -53,7 +53,7 @@ def from_github_repo():
 
 def get_save_remote(versionPath):
 	version = from_github_repo()
-	saveToDrive(version, versionPath)
+	save_to_drive(version, versionPath)
 	return version
 
 def real_version(version):

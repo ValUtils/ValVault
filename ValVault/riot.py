@@ -6,7 +6,7 @@ from requests.adapters import HTTPAdapter
 
 from .exceptions import AuthException
 from .structs import Auth, User
-from .parsing import encodeJSON, magicDecode
+from .parsing import encode_json, magic_decode
 from .get_version import riot_version
 
 platform = {
@@ -29,13 +29,13 @@ FORCED_CIPHERS = [
 	'RSA+3DES'
 ]
 
-def getUserAgent():
+def get_user_agent():
 	version = riot_version()
 	os = "(Windows;10;;Professional, x64)"
 	userAgent = f"RiotClient/{version} rso-auth {os}"
 	return userAgent
 
-def getToken(uri: str):
+def get_token(uri: str):
 	access_token = uri.split("access_token=")[1].split("&scope")[0]
 	token_id = uri.split("id_token=")[1].split("&")[0]
 	return access_token, token_id
@@ -46,9 +46,9 @@ def post(session: requests.Session, access_token, url):
 		'Authorization': f'Bearer {access_token}',
 	}
 	r = session.post(url, headers=headers, json={})
-	return magicDecode(r.text)
+	return magic_decode(r.text)
 
-def setupSession() -> requests.Session:
+def setup_session() -> requests.Session:
 	class SSLAdapter(HTTPAdapter):
 		def init_poolmanager(self, *args: Any, **kwargs: Any) -> None:
 			ctx = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
@@ -58,7 +58,7 @@ def setupSession() -> requests.Session:
 
 	session = requests.session()
 	session.headers = OrderedDict({
-		"User-Agent": getUserAgent(),
+		"User-Agent": get_user_agent(),
 		"Accept-Language": "en-US,en;q=0.9",
 		"Accept": "application/json, text/plain, */*"
 	})
@@ -66,15 +66,15 @@ def setupSession() -> requests.Session:
 	return session
 
 def authenticate(user: User):
-	session = setupSession()
+	session = setup_session()
 
-	setupAuth(session)
+	setup_auth(session)
 
-	access_token, id_token = getAuthToken(session, user)
+	access_token, id_token = get_auth_token(session, user)
 
-	entitlements_token = getEntitlement(session, access_token)
+	entitlements_token = get_entitlement(session, access_token)
 
-	user_id = getUserInfo(session, access_token)
+	user_id = get_user_info(session, access_token)
 
 	session.close()
 
@@ -82,7 +82,7 @@ def authenticate(user: User):
 
 	return auth
 
-def setupAuth(session: requests.Session):
+def setup_auth(session: requests.Session):
 	data = {
 		'client_id': 'riot-client',
 		'nonce': '1',
@@ -93,7 +93,7 @@ def setupAuth(session: requests.Session):
 
 	session.post(f'https://auth.riotgames.com/api/v1/authorization', json=data)
 
-def getAuthToken(session: requests.Session, user: User):
+def get_auth_token(session: requests.Session, user: User):
 	data = {
 		'type': 'auth',
 		'username': user.username,
@@ -105,28 +105,29 @@ def getAuthToken(session: requests.Session, user: User):
 	if ("error" in data):
 		raise AuthException(data['error'])
 	uri = data['response']['parameters']['uri']
-	access_token, id_token = getToken(uri)
+	access_token, id_token = get_token(uri)
 	return [access_token, id_token]
 
-def getEntitlement(session: requests.Session, access_token):
+def get_entitlement(session: requests.Session, access_token):
 	data = post(session, access_token, "https://entitlements.auth.riotgames.com/api/token/v1")
 	return data['entitlements_token']
 
-def getUserInfo(session: requests.Session, access_token):
+
+def get_user_info(session: requests.Session, access_token):
 	data = post(session, access_token, "https://auth.riotgames.com/userinfo")
 	return data['sub']
 
-def getVersion():
+def get_version():
 	r = requests.get('https://valorant-api.com/v1/version')
 	data = r.json()['data']
 	return data["riotClientVersion"]
 
-def makeHeaders(auth: Auth):
+def make_headers(auth: Auth):
 	return {
 		'Accept-Encoding': 'gzip, deflate, br',
-		'User-Agent': getUserAgent(),
+		'User-Agent': get_user_agent(),
 		'Authorization': f'Bearer {auth.access_token}',
 		'X-Riot-Entitlements-JWT': auth.entitlements_token,
-		'X-Riot-ClientPlatform': encodeJSON(platform),
-		'X-Riot-ClientVersion': getVersion()
+		'X-Riot-ClientPlatform': encode_json(platform),
+		'X-Riot-ClientVersion': get_version()
 	}

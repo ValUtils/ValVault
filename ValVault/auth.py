@@ -8,35 +8,35 @@ from .password import EncryptedDB
 
 db: EncryptedDB = None
 
-def reAuth():
+def re_auth():
 	print(f"Wrong username or password, type username and password to retry!")
 	username = input("User: ")
 	password = inputPass("Password: ")
-	db.saveUser(username, password)
-	return getAuth(User(username, password))
+	db.save_user(username, password)
+	return get_auth(User(username, password))
 
-def getAuth(user: User):
+def get_auth(user: User):
 	try:
 		return authenticate(user)
 	except AuthException:
-		return reAuth()
+		return re_auth()
 
-def getUsers():
-	return db.getUsers()
+def get_users():
+	return db.get_users()
 
-def getPass(user):
-	password = db.getPasswd(user)
+def get_pass(user):
+	password = db.get_passwd(user)
 	if not password:
 		password = inputPass("Password: ")
 	return password
 
-def newUser(user, password):
-	return db.saveUser(user, password)
+def new_user(user, password):
+	return db.save_user(user, password)
 
-def getValidPass():
+def get_valid_pass():
 	dbPassword = inputPass("Local password: ")
 	if (not dbPassword):
-		return getValidPass()
+		return get_valid_pass()
 	return dbPassword
 
 def init():
@@ -47,5 +47,5 @@ def init():
 	if (settings.insecure):
 		db = EncryptedDB(" ")
 		return
-	dbPassword = getValidPass()
+	dbPassword = get_valid_pass()
 	db = EncryptedDB(dbPassword)
