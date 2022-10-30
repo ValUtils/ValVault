@@ -35,4 +35,3 @@ class EncryptedDB:
 		entry = self.get_user(user)
 		if (not entry): return None
 		return entry.password
-
