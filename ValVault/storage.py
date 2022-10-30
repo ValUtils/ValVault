@@ -28,21 +28,28 @@ def create_path(path: Path):
 		return
 	path.mkdir()
 
-def linux_config():
+def linux_path():
 	xdg = getenv("XDG_CONFIG_HOME")
 	if (xdg):
-		return Path(xdg) / "ValVault"
+		return Path(xdg) / "ValUtils"
 	home = Path(getenv('HOME'))
-	return home / ".ValVault"
+	return home / ".ValUtils"
+
+def utils_path():
+	global utilsPath
+	if (platform.system() == "Windows"):
+		appdata = Path(getenv('APPDATA'))
+		utilsPath = appdata / "ValUtils"
+		create_path(utilsPath)
+	elif (platform.system() == "Linux"):
+		utilsPath = linux_path()
+		create_path(utilsPath)
+	return utilsPath
 
 def set_path():
 	global settingsPath
-	if (platform.system() == "Windows"):
-		appdata = Path(getenv('APPDATA'))
-		settingsPath = appdata / "ValVault"
-		create_path(settingsPath)
-	elif (platform.system() == "Linux"):
-		settingsPath = linux_config()
-		create_path(settingsPath)
+	utilsPath = utils_path()
+	settingsPath = utilsPath / "vault"
+	create_path(settingsPath)
 
 set_path()
