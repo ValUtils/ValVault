@@ -7,13 +7,6 @@ def add_path():
 
 add_path()
 
-def test_auth():
-	import ValVault
-	username = getenv("USERNAME")
-	password = getenv("PASSWORD")
-	user = ValVault.User(username, password)
-	return ValVault.get_auth(user)
-
 def test_db():
 	import ValVault
 	from ValVault.storage import json_write, settingsPath
