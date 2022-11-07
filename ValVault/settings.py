@@ -1,6 +1,6 @@
 from .structs import Settings
-from .storage import json_read, settingsPath
+from .storage import read_from_drive, save_to_drive, settingsPath
 
 def get_settings() -> Settings:
-	settings = json_read(settingsPath / "config.json")
-	return Settings(settings["insecure"])
+	settings = read_from_drive(settingsPath / "config.json")
+	return Settings().from_json(settings)

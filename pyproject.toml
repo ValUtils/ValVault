@@ -9,6 +9,7 @@ dependencies = [
     "requests",
     "pykeepass",
     "jwt",
+    "dataclass_json",
     "ValLib"
 ]
 requires-python = ">=3.8"
