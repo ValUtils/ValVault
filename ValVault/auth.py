@@ -38,6 +38,12 @@ def get_valid_pass():
 		return get_valid_pass()
 	return dbPassword
 
+def get_aliases():
+	return db.get_aliases()
+
+def get_name(alias):
+	return db.get_name(alias)
+
 def init():
 	global db
 	if (db):

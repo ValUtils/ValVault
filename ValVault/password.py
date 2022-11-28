@@ -16,13 +16,14 @@ class EncryptedDB:
 	def create(self, path, password):
 		self.db = create_database(path, password)
 
-	def save_user(self, user, password):
+	def save_user(self, user, password, alias = ""):
 		entry = self.get_user(user)
 		if (entry):
 			entry.password = password
 			self.db.save()
 			return
-		self.db.add_entry(self.db.root_group, "Riot", user, password)
+		entry = self.db.add_entry(self.db.root_group, "Riot", user, password)
+		entry.set_custom_property("alias", alias)
 		self.db.save()
 
 	def find(self, *args, **kwargs) -> list[Entry]:
@@ -30,6 +31,14 @@ class EncryptedDB:
 
 	def find_one(self, *args, **kwargs) -> Entry:
 		return self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+
+	def get_aliases(self):
+		entries = self.find()
+		return [e.custom_properties["alias"] or e.username for e in entries]
+
+	def get_name(self, alias):
+		entry = self.find_one(string={"alias": alias})
+		return entry.username
 
 	def get_users(self):
 		entries = self.find()
