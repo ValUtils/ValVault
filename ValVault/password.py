@@ -1,4 +1,5 @@
 from pykeepass import create_database, PyKeePass
+from pykeepass.entry import Entry
 
 from .storage import settingsPath
 
@@ -24,12 +25,18 @@ class EncryptedDB:
 		self.db.add_entry(self.db.root_group, "Riot", user, password)
 		self.db.save()
 
+	def find(self, *args, **kwargs) -> list[Entry]:
+		return self.db.find_entries(title="Riot", *args, **kwargs)
+
+	def find_one(self, *args, **kwargs) -> Entry:
+		return self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+
 	def get_users(self):
-		entries = self.db.find_entries(title="Riot")
+		entries = self.find()
 		return [e.username for e in entries]
 
 	def get_user(self, username):
-		return self.db.find_entries(username=username, first=True)
+		return self.find_one(username=username)
 
 	def get_passwd(self, user):
 		entry = self.get_user(user)
