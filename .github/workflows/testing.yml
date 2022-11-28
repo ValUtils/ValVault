@@ -35,3 +35,4 @@ jobs:
         env:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
+          VALUTILS_PATH: "./fixture"
