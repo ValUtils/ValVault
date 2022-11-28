@@ -13,6 +13,7 @@ add_path()
 from ValVault import (
 	init as init_auth, new_user,
 	get_users, get_pass,
+	get_name, get_aliases,
 )
 from ValVault.storage import json_write, settingsPath, utilsPath
 
@@ -33,3 +34,12 @@ def test_db():
 	new_user(username, password)
 	assert username in get_users(), "Username not in db"
 	assert get_pass(username) == password, "Password not in db"
+
+def test_alias():
+	from ValVault.auth import db
+	username = getenv("USERNAME")
+	password = getenv("PASSWORD")
+	alias = "alias"
+	db.save_user(username, password, alias)
+	assert get_name(alias) == username
+	assert alias in get_aliases()
