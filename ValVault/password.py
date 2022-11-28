@@ -1,5 +1,6 @@
 from pykeepass import create_database, PyKeePass
 from pykeepass.entry import Entry
+from typing import List
 
 from .storage import settingsPath
 
@@ -26,7 +27,7 @@ class EncryptedDB:
 		entry.set_custom_property("alias", alias)
 		self.db.save()
 
-	def find(self, *args, **kwargs) -> list[Entry]:
+	def find(self, *args, **kwargs) -> List[Entry]:
 		return self.db.find_entries(title="Riot", *args, **kwargs)
 
 	def find_one(self, *args, **kwargs) -> Entry:
