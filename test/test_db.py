@@ -19,12 +19,15 @@ from ValVault.storage import json_write, settingsPath
 from ValLib.storage import utilsPath
 
 def clean_up():
+	import ValVault.auth
+	ValVault.auth.db = None
 	if (not getenv("VALUTILS_PATH")):
 		return
 	shutil.rmtree(utilsPath)
 
 @pytest.fixture(scope="function", autouse=True)
 def init_env(request):
+	settingsPath.mkdir(parents=True, exist_ok=True)
 	json_write({"insecure": True}, settingsPath / "config.json")
 	init_auth()
 	request.addfinalizer(clean_up)
