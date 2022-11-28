@@ -15,7 +15,8 @@ from ValVault import (
 	get_users, get_pass,
 	get_name, get_aliases,
 )
-from ValVault.storage import json_write, settingsPath, utilsPath
+from ValVault.storage import json_write, settingsPath
+from ValLib.storage import utilsPath
 
 def clean_up():
 	if (not getenv("VALUTILS_PATH")):
