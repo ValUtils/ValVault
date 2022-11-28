@@ -1,4 +1,7 @@
 from os import getenv
+import pytest
+import shutil
+
 def add_path():
 	import os.path
 	import sys
@@ -7,14 +10,26 @@ def add_path():
 
 add_path()
 
+from ValVault import (
+	init as init_auth, new_user,
+	get_users, get_pass,
+)
+from ValVault.storage import json_write, settingsPath, utilsPath
+
+def clean_up():
+	if (not getenv("VALUTILS_PATH")):
+		return
+	shutil.rmtree(utilsPath)
+
+@pytest.fixture(scope="function", autouse=True)
+def init_env(request):
+	json_write({"insecure": True}, settingsPath / "config.json")
+	init_auth()
+	request.addfinalizer(clean_up)
+
 def test_db():
-	import ValVault
-	from ValVault.storage import json_write, settingsPath
-	json_write({"insecure": True},settingsPath / "config.json")
-	ValVault.init()
 	username = getenv("USERNAME")
 	password = getenv("PASSWORD")
-	ValVault.new_user(username, password)
-	assert username in ValVault.get_users(), "Username not in db"
-	assert ValVault.get_pass(username) == password, "Password not in db"
-	
+	new_user(username, password)
+	assert username in get_users(), "Username not in db"
+	assert get_pass(username) == password, "Password not in db"
