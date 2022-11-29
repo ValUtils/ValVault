@@ -47,7 +47,7 @@ def get_aliases():
 def get_name(alias):
 	return db.get_name(alias)
 
-def init():
+def init_vault():
 	global db
 	if (db):
 		return
