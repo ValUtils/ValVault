@@ -32,6 +32,9 @@ def get_pass(user):
 def new_user(user, password):
 	return db.save_user(user, password)
 
+def set_alias(user, alias):
+	return db.set_alias(user, alias)
+
 def get_valid_pass():
 	dbPassword = inputPass("Local password: ")
 	if (not dbPassword):
