@@ -1,20 +1,20 @@
 from getpass import getpass as inputPass
 from ValLib.riot import authenticate, AuthException
-from ValLib.structs import User
+from ValLib.structs import User, Auth
 
 from .settings import get_settings
 from .password import EncryptedDB
 
 db: EncryptedDB = None
 
-def re_auth():
+def re_auth() -> Auth:
 	print(f"Wrong username or password, type username and password to retry!")
 	username = input("User: ")
 	password = inputPass("Password: ")
 	db.save_user(username, password)
 	return get_auth(User(username, password))
 
-def get_auth(user: User):
+def get_auth(user: User) -> Auth:
 	try:
 		return authenticate(user)
 	except AuthException:
