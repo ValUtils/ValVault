@@ -11,7 +11,7 @@ def add_path():
 add_path()
 
 from ValVault import (
-	init as init_auth, new_user,
+	init_vault, new_user,
 	get_users, get_pass,
 	get_name, get_aliases,
 )
@@ -29,7 +29,7 @@ def clean_up():
 def init_env(request):
 	settingsPath.mkdir(parents=True, exist_ok=True)
 	json_write({"insecure": True}, settingsPath / "config.json")
-	init_auth()
+	init_vault()
 	request.addfinalizer(clean_up)
 
 def test_db():
