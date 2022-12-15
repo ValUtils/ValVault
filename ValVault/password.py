@@ -45,6 +45,8 @@ class EncryptedDB:
 
 	def get_name(self, alias):
 		entry = self.find_one(string={"alias": alias})
+		if (not entry):
+			return alias
 		return entry.username
 
 	def get_users(self):
