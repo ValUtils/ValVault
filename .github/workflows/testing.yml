@@ -1,4 +1,4 @@
-name: ValChange Validation
+name: ValVault Validation
 
 on:
   push:
