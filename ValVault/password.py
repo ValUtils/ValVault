@@ -1,8 +1,28 @@
 from pykeepass import create_database, PyKeePass
-from pykeepass.entry import Entry
+from pykeepass.entry import Entry as KpEntry
 from typing import List
 
 from .storage import settingsPath
+
+
+class Entry():
+    entry: KpEntry
+    username: str = ""
+    password: str = ""
+    alias: str = ""
+
+    def set_custom_property(self, key, value):
+        self.entry.set_custom_property(key, value)
+
+    def __init__(self, entry: KpEntry):
+        assert isinstance(entry.username, str)
+        assert isinstance(entry.password, str)
+        assert "alias" in entry.custom_properties
+        assert isinstance(entry.custom_properties["alias"], str)
+        self.username = entry.username
+        self.password = entry.password
+        self.alias = entry.custom_properties["alias"]
+        self.entry = entry
 
 
 class EncryptedDB:
@@ -35,16 +55,24 @@ class EncryptedDB:
         entry.set_custom_property("alias", alias)
 
     def find(self, *args, **kwargs) -> List[Entry]:
-        return self.db.find_entries(title="Riot", *args, **kwargs)
+        entries = self.db.find_entries(title="Riot", *args, **kwargs)
+        if (entries is None):
+            return []
+        custom_entries: List[Entry] = []
+        for e in entries:
+            custom_entries.append(Entry(e))
+        return custom_entries
 
     def find_one(self, *args, **kwargs) -> Entry:
-        return self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+        entry = self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+        assert isinstance(entry, KpEntry)
+        return Entry(entry)
 
     def get_aliases(self):
         entries = self.find()
-        return [e.custom_properties["alias"] or e.username for e in entries]
+        return [e.alias or e.username for e in entries]
 
-    def get_name(self, alias):
+    def get_name(self, alias) -> str:
         entry = self.find_one(string={"alias": alias})
         if (not entry):
             return alias
