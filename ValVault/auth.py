@@ -1,9 +1,11 @@
 from getpass import getpass as inputPass
+from ValStorage import get_settings
 from ValLib.riot import authenticate, AuthException
 from ValLib.structs import User, Auth
 
-from .settings import get_settings
+from .structs import Settings
 from .password import EncryptedDB
+from .storage import settingsPath
 
 db: EncryptedDB = None
 
@@ -61,7 +63,7 @@ def init_vault():
     global db
     if (db):
         return
-    settings = get_settings()
+    settings = get_settings(Settings, settingsPath / "config.json")
     if (settings.insecure):
         db = EncryptedDB(" ")
         return
