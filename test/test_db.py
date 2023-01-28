@@ -1,4 +1,4 @@
-from ValLib.storage import utilsPath
+from ValStorage import utilsPath
 from ValVault.storage import json_write, settingsPath
 from ValVault import (
     init_vault, new_user,

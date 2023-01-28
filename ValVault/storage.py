@@ -1,4 +1,4 @@
-from ValLib.storage import *
+from ValStorage import *
 
 
 def set_path():
