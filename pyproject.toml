@@ -8,7 +8,7 @@ keywords = ["valorant", "vault", "keepass"]
 dependencies = [
     "requests",
     "pykeepass",
-    "jwt",
+    "pyjwt",
     "dataclasses-json",
     "ValLib",
     "ValStorage",
