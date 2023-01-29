@@ -7,7 +7,7 @@ from .structs import Settings
 from .password import EncryptedDB
 from .storage import settingsPath
 
-db: EncryptedDB = None
+db: EncryptedDB
 
 
 def re_auth() -> Auth:
@@ -44,7 +44,7 @@ def set_alias(user, alias):
     return db.set_alias(user, alias)
 
 
-def get_valid_pass():
+def get_valid_pass() -> str:
     dbPassword = inputPass("Local password: ")
     if (not dbPassword):
         return get_valid_pass()
@@ -59,13 +59,19 @@ def get_name(alias):
     return db.get_name(alias)
 
 
-def init_vault():
-    global db
-    if (db):
-        return
+def set_vault() -> EncryptedDB:
     settings = get_settings(Settings, settingsPath / "config.json")
     if (settings.insecure):
         db = EncryptedDB(" ")
-        return
+        return db
     dbPassword = get_valid_pass()
     db = EncryptedDB(dbPassword)
+    return db
+
+
+def init_vault():
+    global db
+    try:
+        return db
+    except NameError:
+        return set_vault()
