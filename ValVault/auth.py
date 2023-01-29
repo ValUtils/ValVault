@@ -74,4 +74,5 @@ def init_vault():
     try:
         return db
     except NameError:
-        return set_vault()
+        db = set_vault()
+        return db
