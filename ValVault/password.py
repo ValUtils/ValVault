@@ -39,12 +39,12 @@ class EncryptedDB:
         self.db = create_database(path, password)
 
     def save_user(self, user, password, alias=""):
-        entry = self.get_user(user)
-        if (entry):
+        try:
+            entry = self.get_user(user)
             entry.password = password
-            self.db.save()
-            return
-        entry = self.db.add_entry(self.db.root_group, "Riot", user, password)
+        except AssertionError:
+            entry = self.db.add_entry(
+                self.db.root_group, "Riot", user, password)
         entry.set_custom_property("alias", alias)
         self.db.save()
 
