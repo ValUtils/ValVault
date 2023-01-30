@@ -22,7 +22,7 @@ add_path()
 
 def clean_up():
     import ValVault.auth
-    ValVault.auth.db = None
+    del ValVault.auth.db
     if (not getenv("VALUTILS_PATH")):
         return
     shutil.rmtree(utilsPath)
