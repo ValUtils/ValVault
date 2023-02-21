@@ -28,6 +28,9 @@ class Entry():
         self.alt = bool(int(entry.custom_properties["alt"]))
         self.entry = entry
 
+    def __repr__(self) -> str:
+        return f"Entry(username={self.username}, alias={self.alias}, alt={self.alt})"
+
 
 class EncryptedDB:
     db: PyKeePass
