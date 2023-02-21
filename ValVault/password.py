@@ -10,6 +10,7 @@ class Entry():
     username: str = ""
     password: str = ""
     alias: str = ""
+    alt: bool = False
 
     def set_custom_property(self, key, value):
         self.entry.set_custom_property(key, value)
@@ -19,9 +20,12 @@ class Entry():
         assert isinstance(entry.password, str)
         assert "alias" in entry.custom_properties
         assert isinstance(entry.custom_properties["alias"], str)
+        assert "alt" in entry.custom_properties
+        assert isinstance(entry.custom_properties["alt"], str)
         self.username = entry.username
         self.password = entry.password
         self.alias = entry.custom_properties["alias"]
+        self.alt = bool(int(entry.custom_properties["alt"]))
         self.entry = entry
 
 
@@ -46,6 +50,7 @@ class EncryptedDB:
             entry = self.db.add_entry(
                 self.db.root_group, "Riot", user, password)
         entry.set_custom_property("alias", alias)
+        entry.set_custom_property("alt", "0")
         self.db.save()
 
     def set_alias(self, username, alias):
@@ -53,6 +58,14 @@ class EncryptedDB:
         if (not entry):
             return
         entry.set_custom_property("alias", alias)
+        self.db.save()
+
+    def set_alt(self, username, alt):
+        entry = self.find_one(username=username)
+        if (not entry):
+            return
+        alt_str = str(int(alt))
+        entry.set_custom_property("alt", alt_str)
         self.db.save()
 
     def find(self, *args, **kwargs) -> List[Entry]:
