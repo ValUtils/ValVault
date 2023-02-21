@@ -53,6 +53,7 @@ class EncryptedDB:
         if (not entry):
             return
         entry.set_custom_property("alias", alias)
+        self.db.save()
 
     def find(self, *args, **kwargs) -> List[Entry]:
         entries = self.db.find_entries(title="Riot", *args, **kwargs)
