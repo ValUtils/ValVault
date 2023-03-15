@@ -4,9 +4,10 @@ from typing import List
 
 from .storage import settingsPath
 from .entry import Entry, EntryException
+from .singleton import SingletonMeta
 
 
-class EncryptedDB:
+class EncryptedDB(metaclass=SingletonMeta):
     db: PyKeePass
 
     def __init__(self, password=None) -> None:
