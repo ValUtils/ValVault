@@ -4,7 +4,7 @@ from ValLib.riot import authenticate, AuthException
 from ValLib.structs import User, Auth
 
 from .structs import Settings
-from .password import EncryptedDB
+from .database import EncryptedDB
 from .storage import settingsPath
 
 db: EncryptedDB
