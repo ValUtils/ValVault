@@ -26,23 +26,22 @@ class EncryptedDB:
             entry = self.new_entry()
         entry.username = user
         entry.password = password
-        entry.set_custom_property("alias", alias)
-        entry.set_custom_property("alt", "0")
+        entry.alias = alias
+        entry.alt = False
         self.db.save()
 
     def set_alias(self, username, alias):
         entry = self.find_one(username=username)
         if (not entry):
             return
-        entry.set_custom_property("alias", alias)
+        entry.alias = alias
         self.db.save()
 
     def set_alt(self, username, alt):
         entry = self.find_one(username=username)
         if (not entry):
             return
-        alt_str = str(int(alt))
-        entry.set_custom_property("alt", alt_str)
+        entry.alt = alt
         self.db.save()
 
     def find(self, *args, **kwargs) -> List[Entry]:

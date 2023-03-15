@@ -8,10 +8,46 @@ class EntryException(BaseException):
 
 class Entry():
     entry: KpEntry
-    username: str = ""
-    password: str = ""
-    alias: str = ""
-    alt: bool = False
+    _username: str = ""
+    _password: str = ""
+    _alias: str = ""
+    _alt: bool = False
+
+    @property
+    def alias(self):
+        return self._alias
+
+    @alias.setter
+    def alias(self, value: str):
+        self.set_custom_property("alias", value)
+        self._alias = value
+
+    @property
+    def alt(self):
+        return self._alt
+
+    @alt.setter
+    def alt(self, value: bool):
+        self.set_custom_property("alt", str(int(value)))
+        self._alt = value
+
+    @property
+    def username(self):
+        return self._username
+
+    @username.setter
+    def username(self, value: str):
+        self.entry.username = value
+        self._username = value
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value: str):
+        self.entry.password = value
+        self._password = value
 
     def set_custom_property(self, key, value):
         self.entry.set_custom_property(key, value)
@@ -30,10 +66,10 @@ class Entry():
         assert isinstance(entry.custom_properties["alias"], str)
         assert "alt" in entry.custom_properties
         assert isinstance(entry.custom_properties["alt"], str)
-        self.username = entry.username
-        self.password = entry.password
-        self.alias = entry.custom_properties["alias"]
-        self.alt = bool(int(entry.custom_properties["alt"]))
+        self._username = entry.username
+        self._password = entry.password
+        self._alias = entry.custom_properties["alias"]
+        self._alt = bool(int(entry.custom_properties["alt"]))
         self.entry = entry
 
     def __repr__(self) -> str:
