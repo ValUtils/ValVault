@@ -3,7 +3,7 @@ from pykeepass.entry import Entry as KpEntry
 from typing import List
 
 from .storage import settingsPath
-from .entry import Entry
+from .entry import Entry, EntryException
 
 
 class EncryptedDB:
@@ -23,7 +23,7 @@ class EncryptedDB:
         try:
             entry = self.get_user(user)
             entry.password = password
-        except AssertionError:
+        except EntryException:
             entry = self.db.add_entry(
                 self.db.root_group, "Riot", user, password)
         entry.set_custom_property("alias", alias)
@@ -56,7 +56,6 @@ class EncryptedDB:
 
     def find_one(self, *args, **kwargs) -> Entry:
         entry = self.db.find_entries(title="Riot", first=True, *args, **kwargs)
-        assert isinstance(entry, KpEntry)
         return Entry(entry)
 
     def get_aliases(self):
