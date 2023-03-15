@@ -22,10 +22,10 @@ class EncryptedDB:
     def save_user(self, user, password, alias=""):
         try:
             entry = self.get_user(user)
-            entry.password = password
         except EntryException:
-            entry = self.db.add_entry(
-                self.db.root_group, "Riot", user, password)
+            entry = self.new_entry()
+        entry.username = user
+        entry.password = password
         entry.set_custom_property("alias", alias)
         entry.set_custom_property("alt", "0")
         self.db.save()
@@ -56,6 +56,12 @@ class EncryptedDB:
 
     def find_one(self, *args, **kwargs) -> Entry:
         entry = self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+        return Entry(entry)
+
+    def new_entry(self) -> Entry:
+        entry = self.db.add_entry(self.db.root_group, "Riot", "", "")
+        entry.set_custom_property("alias", "")
+        entry.set_custom_property("alt", "0")
         return Entry(entry)
 
     def get_aliases(self):
