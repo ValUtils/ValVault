@@ -29,7 +29,7 @@ def clean_up():
 
 
 @pytest.fixture(scope="function", autouse=True)
-def init_env(request):
+def init_env(request: pytest.FixtureRequest):
     settingsPath.mkdir(parents=True, exist_ok=True)
     json_write({"insecure": True}, settingsPath / "config.json")
     init_vault()
