@@ -46,7 +46,7 @@ def set_alias(user, alias):
 
 def get_valid_pass() -> str:
     dbPassword = inputPass("Local password: ")
-    if (not dbPassword):
+    if not dbPassword:
         return get_valid_pass()
     return dbPassword
 
@@ -61,7 +61,7 @@ def get_name(alias):
 
 def set_vault() -> EncryptedDB:
     settings = get_settings(Settings, settingsPath / "config.json")
-    if (settings.insecure):
+    if settings.insecure:
         db = EncryptedDB(" ")
         return db
     dbPassword = get_valid_pass()

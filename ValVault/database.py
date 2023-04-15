@@ -12,7 +12,7 @@ class EncryptedDB(metaclass=SingletonMeta):
 
     def __init__(self, password=None) -> None:
         path = settingsPath / "users.db"
-        if (path.is_file()):
+        if path.is_file():
             self.db = PyKeePass(str(path), password)
             return
         self.create(str(path), password)
@@ -33,21 +33,21 @@ class EncryptedDB(metaclass=SingletonMeta):
 
     def set_alias(self, username, alias):
         entry = self.find_one(username=username)
-        if (not entry):
+        if not entry:
             return
         entry.alias = alias
         self.db.save()
 
     def set_alt(self, username, alt):
         entry = self.find_one(username=username)
-        if (not entry):
+        if not entry:
             return
         entry.alt = alt
         self.db.save()
 
     def find(self, *args, **kwargs) -> List[Entry]:
         entries = self.db.find_entries(title="Riot", *args, **kwargs)
-        if (entries is None):
+        if entries is None:
             return []
         custom_entries: List[Entry] = []
         for e in entries:
@@ -70,7 +70,7 @@ class EncryptedDB(metaclass=SingletonMeta):
 
     def get_name(self, alias) -> str:
         entry = self.find_one(string={"alias": alias})
-        if (not entry):
+        if not entry:
             return alias
         return entry.username
 
@@ -83,6 +83,6 @@ class EncryptedDB(metaclass=SingletonMeta):
 
     def get_passwd(self, user):
         entry = self.get_user(user)
-        if (not entry):
+        if not entry:
             return None
         return entry.password
