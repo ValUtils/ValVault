@@ -7,6 +7,10 @@ from .entry import Entry, EntryException
 from .singleton import SingletonMeta
 
 
+class EntryNotFoundException(BaseException):
+    pass
+
+
 class EncryptedDB(metaclass=SingletonMeta):
     db: PyKeePass
 
@@ -23,7 +27,7 @@ class EncryptedDB(metaclass=SingletonMeta):
     def save_user(self, user, password, alias=""):
         try:
             entry = self.get_user(user)
-        except EntryException:
+        except EntryNotFoundException:
             entry = self.new_entry()
         entry.username = user
         entry.password = password
@@ -48,7 +52,7 @@ class EncryptedDB(metaclass=SingletonMeta):
     def find(self, *args, **kwargs) -> List[Entry]:
         entries = self.db.find_entries(title="Riot", *args, **kwargs)
         if entries is None:
-            return []
+            raise EntryNotFoundException
         custom_entries: List[Entry] = []
         for e in entries:
             custom_entries.append(Entry(e))
@@ -56,6 +60,8 @@ class EncryptedDB(metaclass=SingletonMeta):
 
     def find_one(self, *args, **kwargs) -> Entry:
         entry = self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+        if entry is None:
+            raise EntryNotFoundException
         return Entry(entry)
 
     def new_entry(self) -> Entry:
