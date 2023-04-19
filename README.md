@@ -6,7 +6,7 @@ This python module stores the user credentials of riot users and also provides t
 ## Usage/Examples
 
 ```python
-from ValVault import (
+from ValVault.terminal import (
  init as init_auth,
  make_headers,
  get_users,
