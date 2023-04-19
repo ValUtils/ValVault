@@ -1,6 +1,6 @@
 from ValStorage import utilsPath
 from ValVault.storage import json_write, settingsPath
-from ValVault import (
+from ValVault.terminal import (
     init_vault, new_user,
     get_users, get_pass,
     get_name, get_aliases,
@@ -21,8 +21,8 @@ add_path()
 
 
 def clean_up():
-    import ValVault.auth
-    ValVault.auth.db.__class__.destroy()
+    import ValVault.terminal
+    ValVault.terminal.db.__class__.destroy()
     if not getenv("VALUTILS_PATH"):
         return
     shutil.rmtree(utilsPath)
@@ -45,7 +45,7 @@ def test_db():
 
 
 def test_alias():
-    from ValVault.auth import db
+    from ValVault.terminal import db
     username = getenv("USERNAME")
     password = getenv("PASSWORD")
     alias = "alias"
@@ -55,7 +55,7 @@ def test_alias():
 
 
 def test_setting_alias():
-    from ValVault.auth import db
+    from ValVault.terminal import db
     username = getenv("USERNAME")
     password = getenv("PASSWORD")
     alias = "alias"
