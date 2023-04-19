@@ -55,8 +55,8 @@ class Entry():
     def __init__(self, entry):
         try:
             self._extract_entry(entry)
-        except AssertionError:
-            raise EntryException
+        except AssertionError as e:
+            raise EntryException from e
 
     def _extract_entry(self, entry):
         assert isinstance(entry, KpEntry)
