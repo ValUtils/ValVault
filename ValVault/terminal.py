@@ -1,11 +1,9 @@
 from getpass import getpass as inputPass
-from ValStorage import get_settings
 from ValLib.riot import authenticate, AuthException
 from ValLib.structs import User, Auth
 
-from .structs import Settings
 from .database import EncryptedDB
-from .storage import settingsPath
+from .settings import get_settings
 
 db: EncryptedDB
 
@@ -60,7 +58,7 @@ def get_name(alias):
 
 
 def set_vault() -> EncryptedDB:
-    settings = get_settings(Settings, settingsPath / "config.json")
+    settings = get_settings()
     if settings.insecure:
         db = EncryptedDB(" ")
         return db
