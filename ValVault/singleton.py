@@ -9,7 +9,10 @@ class SingletonMeta(type):
     _lock: Lock = Lock()
 
     def destroy(cls):
-        del cls._instances[cls]
+        try:
+            del cls._instances[cls]
+        except KeyError:
+            pass
 
     def __call__(cls, *args, **kwargs):
         with cls._lock:

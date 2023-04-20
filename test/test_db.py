@@ -1,5 +1,6 @@
 from ValStorage import utilsPath
 from ValVault.storage import json_write, settingsPath
+from ValVault import EncryptedDB
 from ValVault.terminal import (
     init_vault, new_user,
     get_users, get_pass,
@@ -21,8 +22,7 @@ add_path()
 
 
 def clean_up():
-    import ValVault.terminal
-    ValVault.terminal.db.__class__.destroy()
+    EncryptedDB.destroy()
     if not getenv("VALUTILS_PATH"):
         return
     shutil.rmtree(utilsPath)
