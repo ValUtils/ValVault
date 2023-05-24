@@ -56,20 +56,22 @@ class Entry():
         try:
             self._extract_entry(entry)
         except AssertionError as e:
-            raise EntryException from e
+            raise EntryException(*e.args) from None
 
     def _extract_entry(self, entry):
-        assert isinstance(entry, KpEntry)
-        assert isinstance(entry.username, str)
-        assert isinstance(entry.password, str)
-        assert "alias" in entry.custom_properties
-        assert isinstance(entry.custom_properties["alias"], str)
-        assert "alt" in entry.custom_properties
-        assert isinstance(entry.custom_properties["alt"], str)
+        assert isinstance(entry, KpEntry), "Missing entry"
+        assert isinstance(entry.username, str), "Missing username"
+        assert isinstance(entry.password, str), "Missing password"
+        assert "alias" in entry.custom_properties, "Missing alias"
+        assert "alt" in entry.custom_properties, "Missing alt"
+        alias = entry.custom_properties["alias"]
+        alt = entry.custom_properties["alt"]
+        assert isinstance(alias, str), "Bad format alias"
+        assert isinstance(alt, str), "Bad format alt"
         self._username = entry.username
         self._password = entry.password
-        self._alias = entry.custom_properties["alias"]
-        self._alt = bool(int(entry.custom_properties["alt"]))
+        self._alias = alias
+        self._alt = bool(int(alt))
         self.entry = entry
 
     def __repr__(self) -> str:
