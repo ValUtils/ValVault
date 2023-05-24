@@ -57,6 +57,8 @@ class Entry():
             self._extract_entry(entry)
         except AssertionError as e:
             raise EntryException(*e.args) from None
+        except ValueError:
+            raise EntryException("Alt not an integer") from None
 
     def _extract_entry(self, entry):
         assert isinstance(entry, KpEntry), "Missing entry"
