@@ -11,6 +11,10 @@ class EntryNotFoundException(BaseException):
     pass
 
 
+class DatabaseEmptyException(BaseException):
+    pass
+
+
 class EncryptedDB(metaclass=SingletonMeta):
     db: PyKeePass
 
@@ -92,3 +96,28 @@ class EncryptedDB(metaclass=SingletonMeta):
         if not entry:
             return None
         return entry.password
+
+    def fix_database(self):
+        entries = self.db.find_entries()
+        if not entries:
+            raise DatabaseEmptyException
+        for entry in entries:
+            self.fix_entry(entry)
+
+    @staticmethod
+    def fix_entry(entry: KpEntry):
+        def custom_check(key: str):
+            return key not in custom or not custom[key]
+
+        custom = entry.custom_properties
+        if not entry.username:
+            if not entry.password:
+                entry.delete()
+                return
+            entry.username = f"NoUsername{entry.ctime}"
+        if not entry.password:
+            entry.password = ""
+        if custom_check("alias"):
+            entry.set_custom_property("alias", entry.username)
+        if custom_check("alt"):
+            entry.set_custom_property("alt", str(int(False)))
