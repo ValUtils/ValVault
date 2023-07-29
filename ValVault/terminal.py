@@ -16,9 +16,9 @@ def re_auth() -> Auth:
     return get_auth(User(username, password))
 
 
-def get_auth(user: User) -> Auth:
+def get_auth(user: User, remember=True, reauth=False) -> Auth:
     try:
-        return authenticate(user)
+        return db.get_auth(user, remember, reauth)
     except AuthException:
         return re_auth()
 

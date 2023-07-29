@@ -1,10 +1,13 @@
 from pykeepass import create_database, PyKeePass
 from pykeepass.entry import Entry as KpEntry
-from typing import List
+from typing import List, Union
+
+from ValLib import User
 
 from .storage import settingsPath
 from .entry import Entry, EntryException
 from .singleton import SingletonMeta
+from .auth import get_auth
 
 
 class EntryNotFoundException(BaseException):
@@ -96,6 +99,16 @@ class EncryptedDB(metaclass=SingletonMeta):
         if not entry:
             return None
         return entry.password
+
+    def get_auth(self, user: Union[str, User], remember=False, reauth=False):
+        if not isinstance(user, User):
+            user = User(user, "")
+        entry = self.find_one(username=user.username)
+        user.password = entry.password
+        auth = get_auth(user, entry.auth, remember, reauth)
+        entry.auth = auth
+        self.db.save()
+        return auth
 
     def fix_database(self):
         entries = self.db.find_entries()

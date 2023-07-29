@@ -1,4 +1,8 @@
+from typing import Optional
 from pykeepass.entry import Entry as KpEntry
+from ValLib.structs import Auth
+
+from .auth import EntryAuth
 
 
 class EntryException(BaseException):
@@ -12,6 +16,7 @@ class Entry():
     _password: str = ""
     _alias: str = ""
     _alt: bool = False
+    _auth: Optional[Auth] = None
 
     @property
     def alias(self):
@@ -52,6 +57,22 @@ class Entry():
     def set_custom_property(self, key, value):
         self.entry.set_custom_property(key, value)
 
+    @property
+    def auth(self):
+        return self._auth
+
+    @auth.setter
+    def auth(self, auth: Auth):
+        self._auth = auth
+        data = EntryAuth._trans(auth)
+        self.entry.set_custom_property("auth", data)
+
+    def _extract_auth(self, entry: KpEntry):
+        if "auth" not in entry.custom_properties:
+            return
+        raw = entry.custom_properties["auth"]
+        self._auth = EntryAuth._reverse(raw)
+
     def __init__(self, entry):
         try:
             self._extract_entry(entry)
@@ -75,6 +96,7 @@ class Entry():
         self._alias = alias
         self._alt = bool(int(alt))
         self.entry = entry
+        self._extract_auth(entry)
 
     def __repr__(self) -> str:
         return f"Entry(username={self.username}, alias={self.alias}, alt={self.alt})"
