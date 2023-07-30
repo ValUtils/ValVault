@@ -6,7 +6,7 @@ from pykeepass.entry import Entry as KpEntry
 from ValLib import User
 
 from .auth import get_auth
-from .entry import Entry, EntryException
+from .entry import Entry
 from .singleton import SingletonMeta
 from .storage import settingsPath
 
