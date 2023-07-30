@@ -8,6 +8,8 @@ from dataclasses_json import DataClassJsonMixin
 from ValLib import Auth, User, authenticate
 from ValLib.riot import cookie_token
 
+from .debug import Level, log
+
 
 class EntryAuth(Auth, DataClassJsonMixin):
     @classmethod
@@ -40,15 +42,19 @@ def best_auth(user: User, auth: Auth):
         auth.token = token
         auth.cookies = cookies
         return auth
+    log(Level.DEBUG, f"Expired cookies for {user.username}")
     return authenticate(user, auth.remember)
 
 
 def get_auth(user: User, auth: Optional[Auth], remember=False, reauth=False):
     if auth is None:
+        log(Level.DEBUG, f"Auth {user.username} for the first time")
         return authenticate(user, remember)
 
     if reauth or has_expired(auth):
+        log(Level.DEBUG, (f"ReAuth for " if reauth else "Expired Auth for ") + user.username)
         auth.remember = remember
         return best_auth(user, auth)
 
+    log(Level.DEBUG, f"Auth cache hit for {user.username}")
     return auth
