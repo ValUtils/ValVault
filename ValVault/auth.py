@@ -1,8 +1,9 @@
-from json import JSONDecodeError
-from typing import Optional
-from dataclasses_json import DataClassJsonMixin
 from dataclasses import asdict
+from json import JSONDecodeError
 from time import time
+from typing import Optional
+
+from dataclasses_json import DataClassJsonMixin
 
 from ValLib import Auth, User, authenticate
 from ValLib.riot import cookie_token

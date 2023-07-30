@@ -1,13 +1,14 @@
-from pykeepass import create_database, PyKeePass
-from pykeepass.entry import Entry as KpEntry
 from typing import List, Union
+
+from pykeepass import PyKeePass, create_database
+from pykeepass.entry import Entry as KpEntry
 
 from ValLib import User
 
-from .storage import settingsPath
+from .auth import get_auth
 from .entry import Entry, EntryException
 from .singleton import SingletonMeta
-from .auth import get_auth
+from .storage import settingsPath
 
 
 class EntryNotFoundException(BaseException):

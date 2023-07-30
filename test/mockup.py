@@ -1,5 +1,6 @@
 from time import time
 from typing import Dict, Optional
+
 from pykeepass.entry import Entry as KpEntry
 
 

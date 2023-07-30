@@ -1,7 +1,7 @@
 from ValStorage import get_settings as load_settings
 
-from .structs import Settings
 from .storage import settingsPath
+from .structs import Settings
 
 
 def get_settings():

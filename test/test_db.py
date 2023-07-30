@@ -1,14 +1,19 @@
-from ValStorage import utilsPath
-from ValVault.storage import json_write, settingsPath
-from ValVault import EncryptedDB
-from ValVault.terminal import (
-    init_vault, new_user,
-    get_users, get_pass,
-    get_name, get_aliases,
-)
-from os import getenv
-import pytest
 import shutil
+from os import getenv
+
+import pytest
+
+from ValStorage import utilsPath
+from ValVault import EncryptedDB
+from ValVault.storage import json_write, settingsPath
+from ValVault.terminal import (
+    get_aliases,
+    get_name,
+    get_pass,
+    get_users,
+    init_vault,
+    new_user
+)
 
 
 def add_path():

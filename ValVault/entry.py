@@ -1,5 +1,7 @@
 from typing import Optional
+
 from pykeepass.entry import Entry as KpEntry
+
 from ValLib.structs import Auth
 
 from .auth import EntryAuth
