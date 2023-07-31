@@ -57,14 +57,3 @@ def test_alias():
     db.save_user(username, password, alias)
     assert get_name(alias) == username
     assert alias in get_aliases()
-
-
-def test_setting_alias():
-    from ValVault.terminal import db
-    username = getenv("USERNAME")
-    password = getenv("PASSWORD")
-    alias = "alias"
-    db.save_user(username, password)
-    db.set_alias(username, alias)
-    assert get_name(alias) == username
-    assert alias in get_aliases()

@@ -38,7 +38,7 @@ class EncryptedDB(metaclass=SingletonMeta):
     def save_user(self, user: str, password: str, alias=""):
         log(Level.DEBUG, f"Save new user {user} as {alias}", "database")
         try:
-            entry = self.get_user(user)
+            entry = self.find_one(username=user)
         except EntryNotFoundException:
             entry = self.new_entry()
         entry.username = user
@@ -47,9 +47,15 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.alt = False
         self.db.save()
 
-    def find(self, *args, **kwargs) -> List[Entry]:
-        log(Level.DEBUG, f"Finding users {args=} {kwargs=}", "database")
-        entries = self.db.find_entries(title="Riot", *args, **kwargs)
+    def find(self, username: Optional[str] = None, alias: Optional[str] = None, **kwargs) -> List[Entry]:
+        find_args = {
+            **kwargs,
+            "username": username
+        }
+        if alias is not None:
+            find_args["string"] = {"alias": alias}
+        log(Level.DEBUG, f"Finding users {find_args=}", "database")
+        entries = self.db.find_entries(title="Riot", **kwargs)
         if entries is None:
             raise EntryNotFoundException
         custom_entries: List[Entry] = []
@@ -57,9 +63,15 @@ class EncryptedDB(metaclass=SingletonMeta):
             custom_entries.append(Entry(e))
         return custom_entries
 
-    def find_one(self, *args, **kwargs) -> Entry:
-        log(Level.FULL, f"Find one {args=} {kwargs=}", "database")
-        entry = self.db.find_entries(title="Riot", first=True, *args, **kwargs)
+    def find_one(self, username: Optional[str] = None, alias: Optional[str] = None, **kwargs) -> Entry:
+        find_args = {
+            **kwargs,
+            "username": username
+        }
+        if alias is not None:
+            find_args["string"] = {"alias": alias}
+        log(Level.FULL, f"Find one {find_args=}", "database")
+        entry = self.db.find_entries(title="Riot", first=True, **find_args)
         if entry is None:
             raise EntryNotFoundException
         return Entry(entry)
@@ -83,24 +95,6 @@ class EncryptedDB(metaclass=SingletonMeta):
         entries = self.find()
         return [e.username for e in entries]
 
-    def get_name(self, alias: str) -> str:
-        log(Level.DEBUG, f"Get name for {alias}", "database")
-        entry = self.find_one(string={"alias": alias})
-        if not entry:
-            return alias
-        return entry.username
-
-    def get_user(self, username: str):
-        log(Level.DEBUG, f"Get Entry for {username}", "database")
-        return self.find_one(username=username)
-
-    def get_passwd(self, username: str):
-        log(Level.DEBUG, f"Get password for {username}", "database")
-        entry = self.get_user(username)
-        if not entry:
-            return None
-        return entry.password
-
     def get_auth(self, user: Union[str, User], remember=False, reauth=False):
         if not isinstance(user, User):
             user = User(user, "")
@@ -112,22 +106,6 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.auth = auth
         self.db.save()
         return auth
-
-    def set_alias(self, username: str, alias: str):
-        log(Level.DEBUG, f"Set {username} alias to {alias}", "database")
-        entry = self.find_one(username=username)
-        if not entry:
-            return
-        entry.alias = alias
-        self.db.save()
-
-    def set_alt(self, username: str, alt: bool):
-        log(Level.DEBUG, f"Set {username} alt to {alt}", "database")
-        entry = self.find_one(username=username)
-        if not entry:
-            return
-        entry.alt = alt
-        self.db.save()
 
     def fix_database(self):
         log(Level.DEBUG, "Fixing database", "database")

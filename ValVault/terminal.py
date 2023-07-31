@@ -3,7 +3,7 @@ from getpass import getpass as inputPass
 from ValLib.riot import AuthException
 from ValLib.structs import Auth, User
 
-from .database import EncryptedDB
+from .database import EncryptedDB, EntryNotFoundException
 from .debug import Level, log
 from .settings import get_settings
 
@@ -33,10 +33,10 @@ def get_users():
 
 def get_pass(username: str):
     log(Level.FULL, "Get pasword", "terminal")
-    password = db.get_passwd(username)
-    if not password:
-        password = inputPass("Password: ")
-    return password
+    try:
+        return db.find_one(username=username).password
+    except EntryNotFoundException:
+        return inputPass("Password: ")
 
 
 def new_user(username: str, password: str):
@@ -46,7 +46,12 @@ def new_user(username: str, password: str):
 
 def set_alias(username: str, alias: str):
     log(Level.FULL, f"Setting alias for {username} as {alias}", "terminal")
-    return db.set_alias(username, alias)
+    try:
+        entry = db.find_one(username=username)
+        entry.alias = alias
+        db.db.save()
+    except EntryNotFoundException:
+        log(Level.INFO, f"User with alias {username} not found", "terminal")
 
 
 def get_valid_pass() -> str:
@@ -64,7 +69,11 @@ def get_aliases():
 
 def get_name(alias: str):
     log(Level.FULL, f"Get name from alias {alias}", "terminal")
-    return db.get_name(alias)
+    try:
+        return db.find_one(alias=alias).username
+    except EntryNotFoundException:
+        log(Level.INFO, f"User with alias {alias} not found", "terminal")
+        return alias
 
 
 def set_vault() -> EncryptedDB:
