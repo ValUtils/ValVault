@@ -47,22 +47,6 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.alt = False
         self.db.save()
 
-    def set_alias(self, username: str, alias: str):
-        log(Level.DEBUG, f"Set {username} alias to {alias}", "database")
-        entry = self.find_one(username=username)
-        if not entry:
-            return
-        entry.alias = alias
-        self.db.save()
-
-    def set_alt(self, username: str, alt: bool):
-        log(Level.DEBUG, f"Set {username} alt to {alt}", "database")
-        entry = self.find_one(username=username)
-        if not entry:
-            return
-        entry.alt = alt
-        self.db.save()
-
     def find(self, *args, **kwargs) -> List[Entry]:
         log(Level.DEBUG, f"Finding users {args=} {kwargs=}", "database")
         entries = self.db.find_entries(title="Riot", *args, **kwargs)
@@ -126,6 +110,22 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.auth = auth
         self.db.save()
         return auth
+
+    def set_alias(self, username: str, alias: str):
+        log(Level.DEBUG, f"Set {username} alias to {alias}", "database")
+        entry = self.find_one(username=username)
+        if not entry:
+            return
+        entry.alias = alias
+        self.db.save()
+
+    def set_alt(self, username: str, alt: bool):
+        log(Level.DEBUG, f"Set {username} alt to {alt}", "database")
+        entry = self.find_one(username=username)
+        if not entry:
+            return
+        entry.alt = alt
+        self.db.save()
 
     def fix_database(self):
         log(Level.DEBUG, "Fixing database", "database")
