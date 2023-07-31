@@ -71,10 +71,17 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.set_custom_property("alt", "0")
         return Entry(entry)
 
-    def get_aliases(self):
+    @property
+    def aliases(self):
         log(Level.DEBUG, "Getting aliases", "database")
         entries = self.find()
         return [e.alias or e.username for e in entries]
+
+    @property
+    def users(self):
+        log(Level.DEBUG, "Get usernames")
+        entries = self.find()
+        return [e.username for e in entries]
 
     def get_name(self, alias: str) -> str:
         log(Level.DEBUG, f"Get name for {alias}", "database")
@@ -82,11 +89,6 @@ class EncryptedDB(metaclass=SingletonMeta):
         if not entry:
             return alias
         return entry.username
-
-    def get_users(self):
-        log(Level.DEBUG, "Get usernames")
-        entries = self.find()
-        return [e.username for e in entries]
 
     def get_user(self, username: str):
         log(Level.DEBUG, f"Get Entry for {username}", "database")

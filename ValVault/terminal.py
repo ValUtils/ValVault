@@ -28,7 +28,7 @@ def get_auth(user: User, remember=True, reauth=False) -> Auth:
 
 def get_users():
     log(Level.FULL, "Get users", "terminal")
-    return db.get_users()
+    return db.users
 
 
 def get_pass(username: str):
@@ -59,7 +59,7 @@ def get_valid_pass() -> str:
 
 def get_aliases():
     log(Level.FULL, "Get aliases", "terminal")
-    return db.get_aliases()
+    return db.aliases
 
 
 def get_name(alias: str):
