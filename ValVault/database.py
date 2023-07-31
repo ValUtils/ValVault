@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Optional, Union
 
 from pykeepass import PyKeePass, create_database
 from pykeepass.entry import Entry as KpEntry
@@ -23,7 +23,7 @@ class DatabaseEmptyException(BaseException):
 class EncryptedDB(metaclass=SingletonMeta):
     db: PyKeePass
 
-    def __init__(self, password=None) -> None:
+    def __init__(self, password: Optional[str]) -> None:
         path = settingsPath / "users.db"
         if path.is_file():
             log(Level.DEBUG, "Init disk database", "database")
@@ -32,10 +32,10 @@ class EncryptedDB(metaclass=SingletonMeta):
         log(Level.INFO, "Create new database", "database")
         self.create(str(path), password)
 
-    def create(self, path, password):
+    def create(self, path: str, password: Optional[str]):
         self.db = create_database(path, password)
 
-    def save_user(self, user, password, alias=""):
+    def save_user(self, user: str, password: str, alias=""):
         log(Level.DEBUG, f"Save new user {user} as {alias}", "database")
         try:
             entry = self.get_user(user)
@@ -47,7 +47,7 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.alt = False
         self.db.save()
 
-    def set_alias(self, username, alias):
+    def set_alias(self, username: str, alias: str):
         log(Level.DEBUG, f"Set {username} alias to {alias}", "database")
         entry = self.find_one(username=username)
         if not entry:
@@ -55,7 +55,7 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.alias = alias
         self.db.save()
 
-    def set_alt(self, username, alt):
+    def set_alt(self, username: str, alt: bool):
         log(Level.DEBUG, f"Set {username} alt to {alt}", "database")
         entry = self.find_one(username=username)
         if not entry:
@@ -92,7 +92,7 @@ class EncryptedDB(metaclass=SingletonMeta):
         entries = self.find()
         return [e.alias or e.username for e in entries]
 
-    def get_name(self, alias) -> str:
+    def get_name(self, alias: str) -> str:
         log(Level.DEBUG, f"Get name for {alias}", "database")
         entry = self.find_one(string={"alias": alias})
         if not entry:
@@ -104,13 +104,13 @@ class EncryptedDB(metaclass=SingletonMeta):
         entries = self.find()
         return [e.username for e in entries]
 
-    def get_user(self, username):
+    def get_user(self, username: str):
         log(Level.DEBUG, f"Get Entry for {username}", "database")
         return self.find_one(username=username)
 
-    def get_passwd(self, user):
-        log(Level.DEBUG, f"Get password for {user}", "database")
-        entry = self.get_user(user)
+    def get_passwd(self, username: str):
+        log(Level.DEBUG, f"Get password for {username}", "database")
+        entry = self.get_user(username)
         if not entry:
             return None
         return entry.password

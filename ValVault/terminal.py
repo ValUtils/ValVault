@@ -31,22 +31,22 @@ def get_users():
     return db.get_users()
 
 
-def get_pass(user):
+def get_pass(username: str):
     log(Level.FULL, "Get pasword", "terminal")
-    password = db.get_passwd(user)
+    password = db.get_passwd(username)
     if not password:
         password = inputPass("Password: ")
     return password
 
 
-def new_user(user, password):
-    log(Level.FULL, f"Saving new user {user}", "terminal")
-    return db.save_user(user, password)
+def new_user(username: str, password: str):
+    log(Level.FULL, f"Saving new user {username}", "terminal")
+    return db.save_user(username, password)
 
 
-def set_alias(user, alias):
-    log(Level.FULL, f"Setting alias for {user} as {alias}", "terminal")
-    return db.set_alias(user, alias)
+def set_alias(username: str, alias: str):
+    log(Level.FULL, f"Setting alias for {username} as {alias}", "terminal")
+    return db.set_alias(username, alias)
 
 
 def get_valid_pass() -> str:
@@ -62,7 +62,7 @@ def get_aliases():
     return db.get_aliases()
 
 
-def get_name(alias):
+def get_name(alias: str):
     log(Level.FULL, f"Get name from alias {alias}", "terminal")
     return db.get_name(alias)
 
