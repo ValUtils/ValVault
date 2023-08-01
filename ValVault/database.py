@@ -84,13 +84,13 @@ class EncryptedDB(metaclass=SingletonMeta):
         return Entry(entry)
 
     @property
-    def aliases(self):
+    def aliases(self) -> List[str]:
         log(Level.DEBUG, "Getting aliases", "database")
         entries = self.find()
         return [e.alias or e.username for e in entries]
 
     @property
-    def users(self):
+    def users(self) -> List[str]:
         log(Level.DEBUG, "Get usernames")
         entries = self.find()
         return [e.username for e in entries]
