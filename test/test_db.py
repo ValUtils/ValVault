@@ -42,8 +42,8 @@ def init_env(request: pytest.FixtureRequest):
 
 
 def test_db():
-    username = getenv("USERNAME")
-    password = getenv("PASSWORD")
+    username = getenv("USERNAME", "test")
+    password = getenv("PASSWORD", "test")
     new_user(username, password)
     assert username in get_users(), "Username not in db"
     assert get_pass(username) == password, "Password not in db"
@@ -51,8 +51,8 @@ def test_db():
 
 def test_alias():
     from ValVault.terminal import db
-    username = getenv("USERNAME")
-    password = getenv("PASSWORD")
+    username = getenv("USERNAME", "test")
+    password = getenv("PASSWORD", "test")
     alias = "alias"
     db.save_user(username, password, alias)
     assert get_name(alias) == username
