@@ -5,8 +5,7 @@ from typing import Optional
 
 from dataclasses_json import DataClassJsonMixin
 
-from ValLib import Auth, User, authenticate
-from ValLib.riot import cookie_token
+from ValLib import Auth, User, authenticate, cookie_token
 
 from .debug import Level, log
 
@@ -41,6 +40,7 @@ def best_auth(user: User, auth: Auth):
         token, cookies = cookie_token(auth.cookies)
         auth.token = token
         auth.cookies = cookies
+        auth.created = time()
         return auth
     log(Level.DEBUG, f"Expired cookies for {user.username}")
     return authenticate(user, auth.remember)

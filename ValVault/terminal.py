@@ -1,6 +1,6 @@
 from getpass import getpass as inputPass
 
-from ValLib.riot import AuthException
+from ValLib.exceptions import AuthException
 from ValLib.structs import Auth, User
 
 from .database import EncryptedDB, EntryNotFoundException
