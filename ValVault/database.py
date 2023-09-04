@@ -58,9 +58,8 @@ class EncryptedDB(metaclass=SingletonMeta):
         entries = self.db.find_entries(title="Riot", **kwargs)
         if entries is None:
             raise EntryNotFoundException
-        custom_entries: List[Entry] = []
-        for e in entries:
-            custom_entries.append(Entry(e))
+
+        custom_entries = [Entry(e) for e in entries]
         return custom_entries
 
     def find_one(self, username: Optional[str] = None, alias: Optional[str] = None, **kwargs) -> Entry:
