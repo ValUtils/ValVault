@@ -23,7 +23,7 @@ class DatabaseEmptyException(BaseException):
 class EncryptedDB(metaclass=SingletonMeta):
     db: PyKeePass
 
-    def __init__(self, password: Optional[str]) -> None:
+    def __init__(self, password: Optional[str] = None) -> None:
         path = settingsPath / "users.db"
         if path.is_file():
             log(Level.DEBUG, "Init disk database", "database")
