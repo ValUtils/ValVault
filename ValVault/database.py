@@ -83,16 +83,21 @@ class EncryptedDB(metaclass=SingletonMeta):
         return Entry(entry)
 
     @property
+    def entries(self) -> List[Entry]:
+        entries = self.db.entries
+        if entries is None:
+            raise DatabaseEmptyException
+        return [Entry(e) for e in entries]
+
+    @property
     def aliases(self) -> List[str]:
         log(Level.DEBUG, "Getting aliases", "database")
-        entries = self.find()
-        return [e.alias or e.username for e in entries]
+        return [e.alias or e.username for e in self.entries]
 
     @property
     def users(self) -> List[str]:
         log(Level.DEBUG, "Get usernames")
-        entries = self.find()
-        return [e.username for e in entries]
+        return [e.username for e in self.entries]
 
     def get_auth(self, user: Union[str, User], remember=False, reauth=False):
         if not isinstance(user, User):
