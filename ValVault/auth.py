@@ -35,11 +35,12 @@ def cookies_expired(auth: Auth):
     return (time() - auth.created) > ONE_DAY * 30
 
 
-def best_auth(user: User, auth: Auth):
+def best_auth(user: User, auth: Auth, remember: bool):
     if auth.remember and not cookies_expired(auth):
         token, cookies = cookie_token(auth.cookies)
         auth.token = token
         auth.cookies = cookies
+        auth.remember = remember
         auth.created = time()
         return auth
     log(Level.DEBUG, f"Expired cookies for {user.username}")
@@ -53,8 +54,7 @@ def get_auth(user: User, auth: Optional[Auth], remember=False, reauth=False):
 
     if reauth or has_expired(auth):
         log(Level.DEBUG, (f"ReAuth for " if reauth else "Expired Auth for ") + user.username)
-        auth.remember = remember
-        return best_auth(user, auth)
+        return best_auth(user, auth, remember)
 
     log(Level.DEBUG, f"Auth cache hit for {user.username}")
     return auth
