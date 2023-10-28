@@ -44,7 +44,7 @@ def best_auth(user: User, auth: Auth, remember: bool):
         auth.created = time()
         return auth
     log(Level.DEBUG, f"Expired cookies for {user.username}")
-    return authenticate(user, auth.remember)
+    return authenticate(user, remember)
 
 
 def get_auth(user: User, auth: Optional[Auth], remember=False, reauth=False):
