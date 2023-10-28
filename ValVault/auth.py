@@ -5,7 +5,7 @@ from typing import Optional
 
 from dataclasses_json import DataClassJsonMixin
 
-from ValLib import Auth, User, authenticate, cookie_token
+from ValLib import Auth, AuthException, User, authenticate, cookie_token
 
 from .debug import Level, log
 
@@ -35,14 +35,23 @@ def cookies_expired(auth: Auth):
     return (time() - auth.created) > ONE_DAY * 30
 
 
-def best_auth(user: User, auth: Auth, remember: bool):
-    if auth.remember and not cookies_expired(auth):
+def try_cookies(auth: Auth) -> Optional[Auth]:
+    try:
         token, cookies = cookie_token(auth.cookies)
         auth.token = token
         auth.cookies = cookies
-        auth.remember = remember
         auth.created = time()
         return auth
+    except AuthException:
+        return None
+
+
+def best_auth(user: User, auth: Auth, remember: bool):
+    if auth.remember and not cookies_expired(auth):
+        new_auth = try_cookies(auth)
+        if new_auth is not None:
+            return new_auth
+
     log(Level.DEBUG, f"Expired cookies for {user.username}")
     return authenticate(user, remember)
 
