@@ -35,7 +35,7 @@ class EncryptedDB(metaclass=SingletonMeta):
     def create(self, path: str, password: Optional[str]):
         self.db = create_database(path, password)
 
-    def save_user(self, user: str, password: str, alias=""):
+    def save_user(self, user: str, password: str, alias="") -> Entry:
         log(Level.DEBUG, f"Save new user {user} as {alias}", "database")
         try:
             entry = self.find_one(username=user)
@@ -46,6 +46,7 @@ class EncryptedDB(metaclass=SingletonMeta):
         entry.alias = alias
         entry.alt = False
         self.db.save()
+        return entry
 
     def find(self, username: Optional[str] = None, alias: Optional[str] = None, **kwargs) -> List[Entry]:
         find_args = {
