@@ -17,7 +17,7 @@ This python module stores the user credentials of riot users and also provides t
 
 ## Installation
 
-The prefered method of instaltion is through `pip` but if you know better use the package manager that you want.
+The preferred method of installation is through `pip` but if you know better use the package manager that you want.
 
 ```sh
 pip install ValVault
@@ -67,14 +67,14 @@ If you want to read more about ValLib go [here](https://github.com/ValUtils/ValL
 
 `ValVault` contains:
 
-- `Entry` a custom DataClass to make database compabilty easier that contains all info about an user
+- `Entry` a custom DataClass to make database compatibility easier that contains all info about an user
 - `EncryptedDB` a class to handle the database
 
 #### Terminal
 
 `ValVault.terminal` contains the following methods:
 
-- `init_vault` to setup the Vault and promt the user for the password
+- `init_vault` to setup the Vault and prompt the user for the password
 - `get_auth` provided an `User` get authenticated
 - `get_users` get all usernames
 - `get_aliases` get all alias
@@ -107,7 +107,7 @@ And the following properties:
 
 ## Running Tests
 
-Tests need to be run in a development enviroment with GUI, a navigator, `pytest` and filling this enviroment variables.
+Tests need to be run in a development environment with GUI, a navigator, `pytest` and filling this environment variables.
 
 ```sh
 USERNAME="TestUser"
