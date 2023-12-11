@@ -2,9 +2,10 @@ from typing import Optional
 
 from pykeepass.entry import Entry as KpEntry
 
-from ValLib.structs import Auth
+from ValLib.api import get_extra_auth, get_shard
+from ValLib.structs import Auth, ExtraAuth, User
 
-from .auth import EntryAuth
+from .auth import EntryAuth, get_auth
 
 
 class EntryException(BaseException):
@@ -78,6 +79,15 @@ class Entry():
         self._auth = auth
         data = EntryAuth._trans(auth)
         self.entry.set_custom_property("auth", data)
+
+    def get_auth(self, remember=False, reauth=False):
+        user = User(self.username, self.password)
+        self.auth = get_auth(user, self.auth, remember, reauth)
+        if self.region is None:
+            auth = get_extra_auth(self.auth, user.username)
+            self.region = auth.region
+            return auth
+        return ExtraAuth(user.username, self.region, get_shard(self.region), self.auth)
 
     def _extract_auth(self, entry: KpEntry):
         if "auth" not in entry.custom_properties:
