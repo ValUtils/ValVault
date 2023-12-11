@@ -3,7 +3,8 @@ from typing import List, Optional, Union
 from pykeepass import PyKeePass, create_database
 from pykeepass.entry import Entry as KpEntry
 
-from ValLib import User
+from ValLib import ExtraAuth, User
+from ValLib.api import get_extra_auth, get_shard
 
 from .auth import get_auth
 from .debug import Level, log
@@ -110,7 +111,12 @@ class EncryptedDB(metaclass=SingletonMeta):
         auth = get_auth(user, entry.auth, remember, reauth)
         entry.auth = auth
         self.db.save()
-        return auth
+        if entry.region is None:
+            auth = get_extra_auth(auth, user.username)
+            entry.region = auth.region
+            self.db.save()
+            return auth
+        return ExtraAuth(user.username, entry.region, get_shard(entry.region), auth)
 
     def fix_database(self):
         log(Level.DEBUG, "Fixing database", "database")

@@ -19,6 +19,7 @@ class Entry():
     _alias: str = ""
     _alt: bool = False
     _auth: Optional[Auth] = None
+    _region: Optional[str] = None
 
     @property
     def alias(self):
@@ -55,6 +56,15 @@ class Entry():
     def password(self, value: str):
         self.entry.password = value
         self._password = value
+
+    @property
+    def region(self):
+        return self._region
+
+    @region.setter
+    def region(self, value: str):
+        self.set_custom_property("region", value)
+        self._region = value
 
     def set_custom_property(self, key, value):
         self.entry.set_custom_property(key, value)
