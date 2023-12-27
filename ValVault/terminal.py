@@ -15,8 +15,8 @@ def re_auth() -> Auth:
     print(f"Wrong username or password, type username and password to retry!")
     username = input("User: ")
     password = inputPass("Password: ")
-    db.save_user(username, password)
-    return get_auth(User(username, password))
+    entry = db.save_user(username, password)
+    return get_auth(entry.as_user())
 
 
 def get_auth(user: User, remember=True, reauth=False) -> Auth:

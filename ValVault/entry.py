@@ -81,13 +81,16 @@ class Entry():
         self.entry.set_custom_property("auth", data)
 
     def get_auth(self, remember=False, reauth=False):
-        user = User(self.username, self.password)
+        user = self.as_user()
         self.auth = get_auth(user, self.auth, remember, reauth)
         if self.region is None:
             auth = get_extra_auth(self.auth, user.username)
             self.region = auth.region
             return auth
         return ExtraAuth(user.username, self.region, get_shard(self.region), self.auth)
+
+    def as_user(self):
+        return User(self.username, self.password)
 
     def _extract_auth(self, entry: KpEntry):
         if "auth" not in entry.custom_properties:
