@@ -1,7 +1,7 @@
 from getpass import getpass as inputPass
 
 from ValLib.exceptions import AuthException
-from ValLib.structs import Auth, User
+from ValLib.structs import Auth, ExtraAuth, User
 
 from .database import EncryptedDB, EntryNotFoundException
 from .debug import Level, log
@@ -10,7 +10,7 @@ from .settings import get_settings
 db: EncryptedDB
 
 
-def re_auth() -> Auth:
+def re_auth() -> ExtraAuth:
     log(Level.DEBUG, "Getting new user because of auth error")
     print(f"Wrong username or password, type username and password to retry!")
     username = input("User: ")
@@ -19,7 +19,7 @@ def re_auth() -> Auth:
     return get_auth(entry.as_user())
 
 
-def get_auth(user: User, remember=True, reauth=False) -> Auth:
+def get_auth(user: User, remember=True, reauth=False) -> ExtraAuth:
     try:
         return db.get_auth(user, remember, reauth)
     except AuthException:
@@ -100,5 +100,5 @@ __all__ = [
     "get_auth", "get_users", "get_pass",
     "get_aliases", "get_name",
     "new_user", "init_vault",
-    "User", "Auth",
+    "User", "ExtraAuth", "Auth",
 ]
